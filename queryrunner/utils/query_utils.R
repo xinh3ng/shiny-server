@@ -9,7 +9,6 @@ suppressPackageStartupMessages(suppressWarnings({
 }))
 
 
-
 #' Load secret file
 .loadSecret <- function(secret_file) {
   secret <- fromJSON(secret_file)
@@ -17,9 +16,11 @@ suppressPackageStartupMessages(suppressWarnings({
 }
 
 #' Create connection
-createCon <- function(driver=dbDriver("PostgreSQL"), secret_file="~/.tritra_secret") {
+createCon <- function(driver=dbDriver("PostgreSQL"), 
+                      secret_file="~/.tritra_secret") {
   secret = .loadSecret(secret_file)
-  con <- dbConnect(drv=driver, user=secret$user, password=secret$password, host=secret$host,
+  con <- dbConnect(drv=driver, 
+                   user=secret$user, password=secret$password, host=secret$host,
                    dbname=secret$database, port=as.integer(secret$port)
   )
   return(list("driver"=driver, "con"=con))
