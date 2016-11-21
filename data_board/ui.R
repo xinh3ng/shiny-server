@@ -17,7 +17,7 @@ shinyUI(fluidPage(
   sidebarLayout(
     sidebarPanel(
       dateRangeInput("date_range", label="Date range (yyyy-mm-dd)",
-                     start="2016-11-11", end=Sys.Date()+2,
+                     start="2016-11-08", end=Sys.Date()+2,
                      min="2016-11-01", max="2099-12-31"
       ),
       selectInput("query_name", label="Query name", choices=c("hourly_trips", "databoard"),
