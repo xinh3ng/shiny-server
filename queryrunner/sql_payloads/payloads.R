@@ -13,14 +13,14 @@ getSqlPayload <- function(name) {
   all <- list(
     "hourly_trips" = list(
       "query_file" = "./sql/hourly_trips.sql",
-      "args" = list("start_date" = "yyyymmdd [hhmmss]",
-                   "end_date" = "yyyymmdd [hhmmss]"
+      "args" = list("start_date" = "19700101",
+                    "end_date" = "20991231"
                   )
     ),
     "databoard" = list(
       "query_file" = "./sql/databoard.sql",
-      "args" = list("start_date" = "yyyymmdd [hhmmss]",
-                    "end_date" = "yyyymmdd [hhmmss]"
+      "args" = list("start_date" = "19700101",
+                    "end_date" = "20991231"
       )
     )
   )
