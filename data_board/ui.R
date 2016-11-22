@@ -25,7 +25,8 @@ shinyUI(fluidPage(
       )
     ),
     mainPanel(
+      plotOutput("plot"),
       dataTableOutput("table")
-    )
+      )
   )
 ))
