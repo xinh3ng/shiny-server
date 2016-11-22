@@ -6,8 +6,12 @@ suppressPackageStartupMessages({
   library(shiny)
   library("futile.logger")
   flog.layout(layout.format('[~t] ~l - ~m'))
-
-  setwd("/srv/shiny-server")
+  
+  if (1 == 0) {
+    setwd("/srv/shiny-server")  
+  } else {
+    setwd("~/tritra/shiny-server")  
+  }
   source("./queryrunner/utils/query_utils.R")  # To call runQueryWrapperFn
 })
 
