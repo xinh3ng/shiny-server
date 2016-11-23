@@ -7,10 +7,11 @@ suppressPackageStartupMessages({
   library("futile.logger")
   flog.layout(layout.format('[~t] ~l - ~m'))
   
-  if (1 == 0) {
-    setwd("/srv/shiny-server")  
-  } else {
-    setwd("~/tritra/shiny-server")  
+  sys_ver <- Sys.info()[["version"]]
+  if (grepl("Darwin", sys_ver)) {
+    setwd("~/tritra/shiny-server")  # mac  
+  } else if (grepl("Ubuntu", sys_ver)) {
+    setwd("/srv/shiny-server")  # shiny server 
   }
   source("./queryrunner/utils/query_utils.R")  # To call runQueryWrapperFn
   source("./plot/dashboard_line.R") # To call plotdashboad
