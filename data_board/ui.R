@@ -25,9 +25,8 @@ shinyUI(fluidPage(
       )
     ),
     mainPanel(
-      plotOutput("plottrips"),
-      plotOutput("plotsignups"),
-      dataTableOutput("table")
+      dataTableOutput("table"),
+      plotOutput("plotdashboard")
       )
   )
 ))

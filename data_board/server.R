@@ -20,26 +20,18 @@ suppressPackageStartupMessages({
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-
   # "table"
   output$table <- renderDataTable({
     date_range <- gsub("-", "", input$date_range)
     runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
   })
-  output$plottrips <- renderPlot({
+  #plot
+  output$plotdashboard <- renderPlot({
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    bdata$fd <- as.Date(as.POSIXct(
-      as.numeric(as.POSIXct(bdata$ts, format="%Y-%m-%d"))
-      , origin="1970-01-01"))
-    plottrips(bdata)
-  })
-  output$plotsignups <- renderPlot({
-    date_range <- gsub("-", "", input$date_range)
-    bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    bdata$fd <- as.Date(as.POSIXct(
-      as.numeric(as.POSIXct(bdata$ts, format="%Y-%m-%d"))
-      , origin="1970-01-01"))
-    plotsignups(bdata)
+    args <-c('ts_2','trips','paid_trips','signup','active_users')
+    group <- c('trips','signup')
+    ffdata <- reshapedata(bdata,args = args, group = group)
+    plotdashboad(ffdata)
   })
 })
