@@ -21,12 +21,12 @@ shinyUI(fluidPage(
                      min="2016-11-01", max="2099-12-31"
       ),
       selectInput("query_name", label="Query name", choices=c("hourly_trips", "databoard"),
-                  selected="databoard"
+                  selected="hourly_trips"
       )
     ),
     mainPanel(
-      dataTableOutput("table"),
-      plotOutput("plotdashboard")
+      plotOutput("plot"),
+      dataTableOutput("table")
       )
   )
 ))

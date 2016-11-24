@@ -1,12 +1,10 @@
 library(ggplot2)
 library(reshape2)
 
-#data reshape
-reshapedata <- function(name,args, group){
+#dashboard data reshape
+reshapedashboard <- function(name,args, group){
  if("trips" %in% names(name)){
-   name$ts_2 <- as.Date(as.POSIXct(
-    as.numeric(as.POSIXct(name$ts, format="%Y-%m-%d"))
-    , origin="1970-01-01"))
+   name$ts_2 <- as.Date(name$ts)
     # + element
   pivot <- with(name,data_frame(ts_2,trips,paid_trips,signup,active_users)) #ts_2,trips,paid_trips,signup,active_users
     # stack
@@ -24,20 +22,45 @@ reshapedata <- function(name,args, group){
 }
 
 #plottrips
-plotdashboad <- function(name){
+plot_dashboard <- function(name){
   if("tsp" %in% names(name)){
   ggplot(data = name ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 2, scales = 'free_y') +
-    labs(title = "",x = "date",y = "") +
-    scale_x_date (date_breaks = "1 day") +
+    labs(title = "data_plot",x = "date",y = "") +
+    scale_x_date (date_breaks = "1 day", date_labels = "%m-%d") +
+    theme_bw() +
     theme(
-      plot.title = element_text(size=20,colour = "black",face = "bold"),
+      plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
       axis.title.x = element_text(size=15,colour = "black",face = "bold"),
       axis.title.y = element_text(size=15,colour = "black",face = "bold"),
-      axis.text.x  = element_text(angle=60, vjust=0.5,face = "plain"),
-      axis.text.y = element_text(size=10,colour = "red",face = "plain"),
+      axis.text.x  = element_text(size=10, angle=60, vjust=0.5,face = "plain",colour = "gray50"),
+      axis.text.y = element_text(size=10,face = "plain",colour = "gray50"),
       axis.line = element_line(colour = "black",size = 1)
     )
   } else {}
+}
+
+#plot hourly_trips
+plot_hourlytrips <- function(name){
+  if("hour" %in% names(name)){
+     ggplot(name, aes(date, hour)) + #start
+     geom_tile(aes(fill= completed_trips)) + #bulk value
+     scale_fill_continuous(high="darkgreen", low="white", name="trips") +
+     labs(title="hourly_trips", x="date", y="hourly", face = "completed_trips") +
+     scale_y_continuous(breaks = c(0:24)) +
+     geom_text(aes(label=round(completed_trips,2)), angle=0, size = 3) +
+     theme_bw() +
+     theme(
+       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
+       axis.title.x=element_text(size=15, face = "bold"),
+       axis.title.y=element_text(size=15, face = "bold"),
+       axis.text.x=element_text(size=13, colour="grey50", angle = 90, vjust = 0.5, face = "plain"),
+       axis.text.y=element_text(size=15, colour="grey50",face = "plain"),
+       legend.title=element_text(size=15),
+       legend.text=element_text(size=10),
+       panel.grid =element_blank(),
+       legend.key.size = unit(0.8, "cm")
+     )
+    } else {}
 }

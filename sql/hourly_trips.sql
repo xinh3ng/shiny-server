@@ -22,10 +22,11 @@ base_data as (
 )
 
 select
-    ts_vec.ts as ts,
+    to_char(ts_vec.ts::timestamp,'mm/dd') as date,
+    extract('hour' from ts_vec.ts) as hour,
     case when bd.completed_trips is null then 0 else bd.completed_trips end as completed_trips
 from
     base_data as bd
     right join ts_vec on ts_vec.ts = bd.ts
-order by ts asc
+order by ts_vec.ts asc
 

@@ -23,15 +23,30 @@ shinyServer(function(input, output) {
   # "table"
   output$table <- renderDataTable({
     date_range <- gsub("-", "", input$date_range)
-    runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
+    table_databoard <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
+    if (input$query_name == "databoard") {table_databoard}
+    else if (input$query_name == "hourly_trips") {
+      #hourly_trips data reshape
+      table_databoard <- dcast(table_databoard,hour ~ date ,value.var = 'completed_trips')
+      }
   })
-  #plot
-  output$plotdashboard <- renderPlot({
+  #plot dashboard
+  output$plot <- renderPlot({
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    args <-c('ts_2','trips','paid_trips','signup','active_users')
-    group <- c('trips','signup')
-    ffdata <- reshapedata(bdata,args = args, group = group)
-    plotdashboad(ffdata)
+    
+    #plot dashboard
+    if (input$query_name == "databoard"){
+      args <-c('ts_2','trips','paid_trips','signup','active_users')
+      group <- c('trips','signup')
+      ffdata <- reshapedashboard(bdata,args = args, group = group)
+      plot_dashboard(ffdata)
+    }
+    #plot hourlytrips
+    else if (input$query_name == "hourly_trips"){
+      date_range <- gsub("-", "", input$date_range)
+      bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
+      plot_hourlytrips(bdata)
+      }
   })
 })
