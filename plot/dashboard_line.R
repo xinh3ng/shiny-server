@@ -23,11 +23,18 @@ reshapedashboard <- function(table,args, reshape_vars){
 
 #plottrips
 plot_dashboard <- function(data){
+  if (length(data$ts_2) < 10*length(unique(data$gtsp))){
+    breaks <- "1 day"
+  } else if ((length(data$ts_2) >= 10*length(unique(data$gtsp))) && (length(data$ts_s) < 30*length(unique(data$gtsp)))){
+    breaks <- "2 days"
+  } else if (length(data$ts_2) >= 30*length(unique(data$gtsp))){
+    breaks <- "3 days"  
+    }
   ggplot(data = data ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
     labs(title = "data_plot",x = "date",y = "") +
-    scale_x_date (date_breaks = "1 day", date_labels = "%m-%d") +
+    scale_x_date (date_breaks = breaks , date_labels = "%m-%d") +
     theme_bw() +
     theme(
       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
