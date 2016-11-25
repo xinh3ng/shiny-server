@@ -3,7 +3,6 @@ library(reshape2)
 
 #dashboard data reshape
 reshapedashboard <- function(table,args, reshape_vars){
- if("trips" %in% names(table)){
    table$ts_2 <- as.Date(table$ts)
     # + element
   pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users)) #ts_2,trips,paid_trips,signup,active_users
@@ -18,12 +17,11 @@ reshapedashboard <- function(table,args, reshape_vars){
   }
   fdata = melt(data = pivot, id.vars = groupvars, value.name = "tsp", variable.name = "gtsp")
   return(fdata)
- } else {}
 }
 
 #plottrips
-plot_dashboard <- function(name){
-  ggplot(data = name ,aes(x = ts_2,y = tsp)) + #start
+plot_dashboard <- function(data){
+  ggplot(data = data ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 2, scales = 'free_y') +
     labs(title = "data_plot",x = "date",y = "") +
@@ -40,8 +38,8 @@ plot_dashboard <- function(name){
 }
 
 #plot hourly_trips
-plot_hourlytrips <- function(name){
-     ggplot(name, aes(date, hour)) + #start
+plot_hourlytrips <- function(data){
+     ggplot(data, aes(date, hour)) + #start
      geom_tile(aes(fill= completed_trips)) + #bulk value
      scale_fill_continuous(high="darkgreen", low="white", name="trips") +
      labs(title="hourly_trips", x="date", y="hourly", face = "completed_trips") +
