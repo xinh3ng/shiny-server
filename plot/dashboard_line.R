@@ -5,7 +5,9 @@ library(reshape2)
 reshapedashboard <- function(table,args, reshape_vars){
    table$ts_2 <- as.Date(table$ts)
     # + element
-  pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users)) #ts_2,trips,paid_trips,signup,active_users
+  pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users,
+                                 avg_ontrip_minutes,c_r,trips_paid_pct,trips_bike,
+                                 active_bikes,first_trip)) #ts_2,trips,paid_trips,signup,active_users
     # stack
   j <- 1
   groupvars <- c(1:1)
@@ -23,7 +25,7 @@ reshapedashboard <- function(table,args, reshape_vars){
 plot_dashboard <- function(data){
   ggplot(data = data ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
-    facet_wrap(~gtsp, nrow = 2, scales = 'free_y') +
+    facet_wrap(~gtsp, nrow = 4, scales = 'free') +
     labs(title = "data_plot",x = "date",y = "") +
     scale_x_date (date_breaks = "1 day", date_labels = "%m-%d") +
     theme_bw() +
