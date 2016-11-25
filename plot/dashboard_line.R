@@ -33,7 +33,7 @@ plot_dashboard <- function(data){
       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
       axis.title.x = element_text(size=15,colour = "black",face = "bold"),
       axis.title.y = element_text(size=15,colour = "black",face = "bold"),
-      axis.text.x  = element_text(size=10, angle=60, vjust=0.5,face = "plain",colour = "gray50"),
+      axis.text.x  = element_text(size=10, angle=90, vjust=0.5,face = "bold",colour = "gray50"),
       axis.text.y = element_text(size=10,face = "plain",colour = "gray50"),
       axis.line = element_line(colour = "black",size = 1)
     )
@@ -52,8 +52,8 @@ plot_hourlytrips <- function(data){
        plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
        axis.title.x=element_text(size=15, face = "bold"),
        axis.title.y=element_text(size=15, face = "bold"),
-       axis.text.x=element_text(size=13, colour="grey50", angle = 90, vjust = 0.5, face = "plain"),
-       axis.text.y=element_text(size=15, colour="grey50",face = "plain"),
+       axis.text.x=element_text(size=13, colour="grey50", angle = 90, vjust = 0.5, face = "bold"),
+       axis.text.y=element_text(size=15, colour="grey50",face = "bold"),
        legend.title=element_text(size=15),
        legend.text=element_text(size=10),
        panel.grid =element_blank(),
