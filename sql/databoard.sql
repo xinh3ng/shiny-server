@@ -70,7 +70,20 @@ analysis_users as (
 	      group by 1
 	  ) as f on f.min_trip_date = b.ts
   group by 1,3
-)
+),
+
+base_bikes as (
+    select 
+        date_trunc('day',updated_at at time zone 'hkt') as ts,
+        count(distinct(bike_id)) as active_bikes
+    from trips
+        cross join date d
+	  where 1=1 
+		    and	updated_at at time zone 'hkt' >= d.start_date
+	    	and updated_at at time zone 'hkt' < d.end_date
+	    	and is_completed is TRUE
+	   group by 1
+    )
 
 select 
 	bt.*
@@ -78,6 +91,7 @@ select
 	,cast(cast(bt.paid_trips as numeric) /cast(bt.trips as numeric)as decimal (10,2)) as trips_paid_pct
 	,cast(bt.paid_fare_CNY/bt.total_fare_CNY as decimal (10,2)) as fare_paid_pct
 	,cast(cast(bt.completed_trips as numeric)/76 as decimal (10,2)) as trips_bike
+	,active_bikes as active_bikes
 	,cast(bt.total_fare_CNY::numeric / bt.completed_trips::numeric as decimal (10,2)) as avg_fare_trip_cny
 	,cast(bt.total_fare_CNY/76 as decimal (10,2)) as avg_fare_bike_cny
 	,bu.signup
@@ -86,5 +100,6 @@ select
 	,cast(cast(bt.completed_trips as numeric) / cast(au.active_users as numeric) as decimal (10,2)) as trips_user
 from base_trips bt
 join base_users bu on bu.ts = bt.ts
+join base_bikes bb on bb.ts = bt.ts
 join analysis_users au on au.ts = bt.ts
 order by 1 desc
