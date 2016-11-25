@@ -35,15 +35,12 @@ shinyServer(function(input, output) {
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
     
-    #plot dashboard
-    if (input$query_name == "databoard"){
+    if (input$query_name == "databoard"){  #plot databoard
       args <-c('ts_2','trips','paid_trips','signup','active_users')
       group <- c('trips','signup')
-      ffdata <- reshapedashboard(bdata,args = args, group = group)
+      ffdata <- reshapedashboard(table = bdata,args = args, reshape_vars = group)
       plot_dashboard(ffdata)
-    }
-    #plot hourlytrips
-    else if (input$query_name == "hourly_trips"){
+    } else if (input$query_name == "hourly_trips"){ #plot hourlytrips
       date_range <- gsub("-", "", input$date_range)
       bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
       plot_hourlytrips(bdata)

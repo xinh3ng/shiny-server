@@ -2,16 +2,16 @@ library(ggplot2)
 library(reshape2)
 
 #dashboard data reshape
-reshapedashboard <- function(name,args, group){
- if("trips" %in% names(name)){
-   name$ts_2 <- as.Date(name$ts)
+reshapedashboard <- function(table,args, reshape_vars){
+ if("trips" %in% names(table)){
+   table$ts_2 <- as.Date(table$ts)
     # + element
-  pivot <- with(name,data_frame(ts_2,trips,paid_trips,signup,active_users)) #ts_2,trips,paid_trips,signup,active_users
+  pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users)) #ts_2,trips,paid_trips,signup,active_users
     # stack
   j <- 1
   groupvars <- c(1:1)
   for (i in 1:length(args)) {
-    if (!args[i] %in% group) {
+    if (!args[i] %in% reshape_vars) {
       groupvars[j] <- args[i]
       j <- j+1
     }
@@ -23,7 +23,6 @@ reshapedashboard <- function(name,args, group){
 
 #plottrips
 plot_dashboard <- function(name){
-  if("tsp" %in% names(name)){
   ggplot(data = name ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 2, scales = 'free_y') +
@@ -38,12 +37,10 @@ plot_dashboard <- function(name){
       axis.text.y = element_text(size=10,face = "plain",colour = "gray50"),
       axis.line = element_line(colour = "black",size = 1)
     )
-  } else {}
 }
 
 #plot hourly_trips
 plot_hourlytrips <- function(name){
-  if("hour" %in% names(name)){
      ggplot(name, aes(date, hour)) + #start
      geom_tile(aes(fill= completed_trips)) + #bulk value
      scale_fill_continuous(high="darkgreen", low="white", name="trips") +
@@ -62,5 +59,4 @@ plot_hourlytrips <- function(name){
        panel.grid =element_blank(),
        legend.key.size = unit(0.8, "cm")
      )
-    } else {}
 }
