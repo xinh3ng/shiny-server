@@ -22,6 +22,9 @@ getSqlPayload <- function(name) {
       "args" = list("start_date" = "19700101",
                     "end_date" = "20991231"
       )
+    ),
+    "bikes_fraud" = list(
+      "query_file" = "./sql/bikes_fraud.sql"
     )
   )
 

@@ -7,7 +7,7 @@ reshapedashboard <- function(table,args, reshape_vars){
     # + element
   pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users,
                                  avg_ontrip_minutes,c_r,trips_paid_pct,trips_bike,
-                                 active_bikes,first_trip)) #ts_2,trips,paid_trips,signup,active_users
+                                 active_bikes,first_trip)) 
     # stack
   j <- 1
   groupvars <- c(1:1)
@@ -23,14 +23,21 @@ reshapedashboard <- function(table,args, reshape_vars){
 
 #plottrips
 plot_dashboard <- function(data){
-  if (length(data$ts_2) < 10*length(unique(data$gtsp))){
+  args <-c('ts_2','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
+           'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
+  group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
+             'trips_bike','active_bikes','active_users','first_trip')
+  ffdata <- reshapedashboard(table = data, args = args, reshape_vars = group) #reshape
+  
+  if (length(ffdata$ts_2) < 10*length(unique(ffdata$gtsp))){ #axis_x breaks
     breaks <- "1 day"
-  } else if ((length(data$ts_2) >= 10*length(unique(data$gtsp))) && (length(data$ts_s) < 30*length(unique(data$gtsp)))){
+  } else if ((length(ffdata$ts_2) >= 10*length(unique(ffdata$gtsp))) && (length(ffdata$ts_s) < 30*length(unique(ffdata$gtsp)))){
     breaks <- "2 days"
-  } else if (length(data$ts_2) >= 30*length(unique(data$gtsp))){
+  } else if (length(ffdata$ts_2) >= 30*length(unique(ffdata$gtsp))){
     breaks <- "3 days"  
-    }
-  ggplot(data = data ,aes(x = ts_2,y = tsp)) + #start
+  }
+  
+  ggplot(data = ffdata ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
     labs(title = "data_plot",x = "date",y = "") +
@@ -66,4 +73,28 @@ plot_hourlytrips <- function(data){
        panel.grid =element_blank(),
        legend.key.size = unit(0.8, "cm")
      )
+}
+#plot bikes_lasttrip
+plot_bikes_lasttrip <- function(data){
+  data$a <- "date"
+ # data$bike_lasttrip_time <- as.Date((data$bike_lasttrip_time))
+  
+  ggplot(data, aes(x=date, y = plate)) + #start
+    geom_tile(aes(fill= bike_lasttrip_time)) + #bulk value
+    scale_fill_date() +
+    labs(title="bikes_ls", x="date", y="plate", face = "completed_trips") +
+  #  scale_y_discrete(breaks = 1, limit = c(10000,10100), na.value = 2016-10-01 ) +
+  #  geom_text(aes(label=bike_lasttrip_time ), angle=0, size = 3) +
+    theme_bw() +
+    theme(
+      plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
+      axis.title.x=element_text(size=15, face = "bold"),
+      axis.title.y=element_text(size=15, face = "bold"),
+      axis.text.x=element_text(size=13, colour="grey50", angle = 90, vjust = 0.5, face = "bold"),
+      axis.text.y=element_text(size=15, colour="grey50",face = "bold"),
+      legend.title=element_text(size=15),
+      legend.text=element_text(size=10),
+      panel.grid =element_blank(),
+      legend.key.size = unit(0.8, "cm")
+    )
 }
