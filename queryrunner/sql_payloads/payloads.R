@@ -15,16 +15,22 @@ getSqlPayload <- function(name) {
       "query_file" = "./sql/hourly_trips.sql",
       "args" = list("start_date" = "19700101",
                     "end_date" = "20991231"
-                  )
+      )
     ),
     "databoard" = list(
       "query_file" = "./sql/databoard.sql",
       "args" = list("start_date" = "19700101",
                     "end_date" = "20991231"
       )
+    ),
+    "bikes_fraud" = list(
+      "query_file" = "./sql/bikes_fraud.sql"
+    ),
+    "users_info" = list(
+      "query_file" = "./sql/users_info.sql"
     )
   )
-
+  
   return(all[[name]])
 }
 
@@ -40,7 +46,7 @@ getSqlPayload <- function(name) {
 parseSqlPayload <- function(payload, ...) {
   args <- list(...)
   if(!.is_file(payload$query_file)) {stop("Invalid or non-existent query file")}
-
+  
   query <- readLines(payload$query_file) %>% paste(., collapse=" ")
   for (name in names(args)) {
     arg <- args[[name]]
