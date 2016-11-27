@@ -23,7 +23,12 @@ reshapedashboard <- function(table,args, reshape_vars){
 
 #plottrips
 plot_dashboard <- function(data){
-  ggplot(data = data ,aes(x = ts_2,y = tsp)) + #start
+  args <-c('ts_2','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
+           'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
+  group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
+             'trips_bike','active_bikes','active_users','first_trip')
+  ffdata <- reshapedashboard(table = data, args = args, reshape_vars = group)
+  ggplot(data = ffdata ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
     labs(title = "data_plot",x = "date",y = "") +
