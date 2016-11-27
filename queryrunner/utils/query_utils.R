@@ -4,7 +4,7 @@ suppressPackageStartupMessages(suppressWarnings({
   library("jsonlite")
   library("futile.logger")
   library("dplyr")
-
+  
   source("./queryrunner/sql_payloads/payloads.R")
 }))
 
@@ -40,20 +40,20 @@ runQuery <- function(con, query) {
 #'
 #' @param query_name Options hourly_trips, databoard
 runQueryWrapperFn <- function(query_name, date_range, secret_file="~/.tritra_secret") {
-
+  
   flog.info("Starting a db connection")
   con_inst <- createCon(driver=dbDriver("PostgreSQL"), secret_file=secret_file)
   flog.info("db connection is created")
-
+  
   payload <- getSqlPayload(query_name)
   query <- parseSqlPayload(payload=payload, start_date=date_range[1], end_date=date_range[2])
-
+  
   data <- runQuery(con=con_inst$con, query=query)
   flog.info("Data query is finished")
-
+  
   # Close conections
   dbDisconnect(con_inst$con)
   flog.info("db connection off")
-
+  
   return(data)
 }
