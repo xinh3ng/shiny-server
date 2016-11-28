@@ -22,14 +22,15 @@ options(warn=1)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
-  column_s <- reactive({
-    long_table_names %>%
+  column_selected <- reactive({
+    long_col_names <- .create_col_names("data_board","bikes_fraud","users_info")
+    long_col_names %>%
       filter(name == input$query_name) %>%
       select(subcolumn)
   })
   #sub select
   output$slt_column <- renderUI({
-    checkboxGroupInput("subcolumn",label = "Column", choices = column_s()$subcolumn, selected = column_s()$subcolumn)
+    checkboxGroupInput("subcolumn",label = "Column", choices = column_selected()$subcolumn, selected = column_selected()$subcolumn)
   })
   
   # "table"
@@ -39,7 +40,6 @@ shinyServer(function(input, output) {
     
     if (input$query_name %in% c("data_board","bikes_fraud","users_info")) {
       cs <- as.matrix(input$subcolumn)
-      colnames(cs) = NULL
       bdata[,cs[,1]]
     } else if (input$query_name == "hourly_trips") { #hourly_trips data reshape
       dcast(bdata, hour ~ date ,value.var = 'completed_trips')
