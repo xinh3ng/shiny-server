@@ -1,8 +1,11 @@
-library(ggplot2)
-library(reshape2)
+suppressPackageStartupMessages({
+  library(ggplot2)
+  library(reshape2)  
+})
+
 
 #dashboard data reshape
-reshapedashboard <- function(table,args, reshape_vars){
+reshape_dashboard <- function(table,args, reshape_vars){
   table$ts_2 <- as.Date(table$ts)
   # + element
   pivot <- with(table,data_frame(ts_2,trips,paid_trips,signup,active_users,
@@ -27,7 +30,7 @@ plot_dashboard <- function(data){
            'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
   group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
              'trips_bike','active_bikes','active_users','first_trip')
-  ffdata <- reshapedashboard(table = data, args = args, reshape_vars = group)
+  ffdata <- reshape_dashboard(table = data, args = args, reshape_vars = group)
   ggplot(data = ffdata ,aes(x = ts_2,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
