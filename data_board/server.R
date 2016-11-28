@@ -29,7 +29,7 @@ shinyServer(function(input, output) {
   })
   #sub select
   output$slt_column <- renderUI({
-    checkboxGroupInput("column",label = "Column:", choices = column_s()$column)
+    checkboxGroupInput("sub_select",label = "Column", choices = column_s()$column)
   })
   
   # "table"

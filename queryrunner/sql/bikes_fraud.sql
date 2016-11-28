@@ -41,6 +41,31 @@ group by 1
 
 select 
     b.plate
+    ,case when b.plate in (
+    	'010002',
+		'010007',
+		'010008',
+		'010016',
+		'010023',
+		'010025',
+		'010038',
+		'010039',
+		'010041',
+		'010049',
+		'010053',
+		'010054',
+		'010070',
+		'010078',
+		'010080',
+		'010086',
+		'010087',
+		'010088',
+		'010090',
+		'010091',
+		'010093',
+		'010094',
+		'010099')
+		then 'N' else 'Y' end as in_school
     ,bb.bike_lt_c_trips
     ,bb.bike_lt_paid_trips
     ,bb.user_served
@@ -67,4 +92,4 @@ from a
     left join base_bike bb on bb.bike_id = a.bike_id
 where 1=1	
     and u.is_active = 'TRUE'	
-order by 1
+order by 2 desc,1

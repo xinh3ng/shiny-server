@@ -31,6 +31,7 @@ users_info,user_wechat_city
 users_info,user_wechat_name
 users_info,user_wechat_gender
 bikes_fraud,plate
+bikes_fraud,in_school
 bikes_fraud,bike_lt_c_trips
 bikes_fraud,bike_lt_paid_trips
 bikes_fraud,user_served
