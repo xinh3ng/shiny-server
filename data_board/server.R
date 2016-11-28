@@ -5,6 +5,7 @@
 suppressPackageStartupMessages({
   library(shiny)
   library(futile.logger)
+  library(shinydashboard)
   flog.layout(layout.format('[~t] ~l - ~m'))
   
   sys_ver <- Sys.info()[["version"]]
@@ -21,6 +22,15 @@ options(warn=1)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+  column_s <- reactive({
+    length_table_names %>%
+      filter(name == input$query_name) %>%
+      select(column)
+  })
+  #sub select
+  output$slt_column <- renderUI({
+    checkboxGroupInput("column",label = "Column:", choices = column_s()$column)
+  })
   
   # "table"
   output$table <- renderDataTable({

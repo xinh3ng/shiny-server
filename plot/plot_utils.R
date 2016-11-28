@@ -27,7 +27,7 @@ suppressPackageStartupMessages({
 
 
 plot_dashboard <- function(data){
-  args <-c('ts','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
+  args <- c('ts','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
            'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
   group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
              'trips_bike','active_bikes','active_users','first_trip')

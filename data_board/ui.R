@@ -22,7 +22,8 @@ shinyUI(fluidPage(
       ),
       selectInput("query_name", label="Query name", choices=c("hourly_trips", "data_board", "bikes_fraud", "users_info"),
                   selected="hourly_trips"
-      )
+      ),
+      uiOutput("slt_column")
     ),
     mainPanel(
       plotOutput("plot"),
