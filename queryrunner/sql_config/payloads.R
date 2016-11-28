@@ -34,4 +34,4 @@ getSqlPayload <- function(name) {
   return(all[[name]])
 }
 
-length_table_names <- read.csv("./queryrunner/sql_config/length_table_names.csv")
+long_table_names <- read.csv("./queryrunner/sql_config/long_table_names.csv")
