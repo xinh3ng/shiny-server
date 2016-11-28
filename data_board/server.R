@@ -14,13 +14,14 @@ suppressPackageStartupMessages({
     setwd("/srv/shiny-server")  # shiny server 
   }
   source("./queryrunner/utils/query_utils.R")  # To call runQueryWrapperFn
-  source("./plot/dashboard_line.R") # To call plotdashboad
+  source("./plot/plot_utils.R")
 })
 
 options(warn=1)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
+  
   # "table"
   output$table <- renderDataTable({
     date_range <- gsub("-", "", input$date_range)
@@ -33,15 +34,18 @@ shinyServer(function(input, output) {
     }
   })
   
-  # plot dashboard
+  # plot
   output$plot <- renderPlot({
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
+    
     if (input$query_name == "data_board") {
-      plot_dashboard(data = bdata)
+      plot_dashboard(data=bdata)
     } else if (input$query_name == "hourly_trips"){ #plot hourlytrips
-      plot_hourlytrips(data = bdata)
-    } else if (input$query_name %in% c("bikes_fraud","users_info")){stop("No Plot For This Table")} #plot bikes_lasttrip
+      plot_hourlytrips(data=bdata)
+    } else if (input$query_name %in% c("bikes_fraud","users_info")){
+      plot_empty(data=bdata)
+    }
     
   })
 })

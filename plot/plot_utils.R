@@ -5,8 +5,8 @@ suppressPackageStartupMessages({
 })
 
 
-# dashboard data reshape
-reshape_dashboard <- function(table, args, reshape_vars){
+# Private function: dashboard data reshape
+.reshape_dashboard <- function(table, args, reshape_vars){
   table$ts <- as.Date(table$ts)
   # + element
   pivot <- with(table,data_frame(ts,trips,paid_trips,signup,active_users,
@@ -25,13 +25,13 @@ reshape_dashboard <- function(table, args, reshape_vars){
   return(fdata)
 }
 
-#plottrips
+
 plot_dashboard <- function(data){
   args <-c('ts','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
            'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
   group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
              'trips_bike','active_bikes','active_users','first_trip')
-  ffdata <- reshape_dashboard(table = data, args = args, reshape_vars = group)
+  ffdata <- .reshape_dashboard(table = data, args = args, reshape_vars = group)
   ggplot(data = ffdata ,aes(x = ts,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
@@ -48,7 +48,7 @@ plot_dashboard <- function(data){
     )
 }
 
-#plot hourly_trips
+# plot hourly_trips
 plot_hourlytrips <- function(data){
   ggplot(data, aes(date, hour)) + #start
     geom_tile(aes(fill= completed_trips)) + #bulk value
@@ -68,4 +68,8 @@ plot_hourlytrips <- function(data){
       panel.grid =element_blank(),
       legend.key.size = unit(0.8, "cm")
     )
+}
+
+plot_empty <- function(data) {
+  ggplot()
 }
