@@ -4,7 +4,7 @@
 
 suppressPackageStartupMessages({
   library(shiny)
-  library("futile.logger")
+  library(futile.logger)
   flog.layout(layout.format('[~t] ~l - ~m'))
   
   sys_ver <- Sys.info()[["version"]]
@@ -17,6 +17,7 @@ suppressPackageStartupMessages({
   source("./plot/dashboard_line.R") # To call plotdashboad
 })
 
+options(warn=1)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -24,7 +25,8 @@ shinyServer(function(input, output) {
   output$table <- renderDataTable({
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    if (input$query_name %in% c("databoard","bikes_fraud","users_info")) {
+    
+    if (input$query_name %in% c("data_board","bikes_fraud","users_info")) {
       bdata
     } else if (input$query_name == "hourly_trips") { #hourly_trips data reshape
       dcast(bdata, hour ~ date ,value.var = 'completed_trips')
@@ -35,7 +37,7 @@ shinyServer(function(input, output) {
   output$plot <- renderPlot({
     date_range <- gsub("-", "", input$date_range)
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    if (input$query_name == "databoard"){  #plot databoard
+    if (input$query_name == "data_board") {
       plot_dashboard(data = bdata)
     } else if (input$query_name == "hourly_trips"){ #plot hourlytrips
       plot_hourlytrips(data = bdata)

@@ -14,20 +14,20 @@ getSqlPayload <- function(name) {
     "hourly_trips" = list(
       "query_file" = "./sql/hourly_trips.sql",
       "args" = list("start_date" = "19700101",
-                    "end_date" = "20991231"
-      )
+                    "end_date" = "20991231")
     ),
-    "databoard" = list(
-      "query_file" = "./sql/databoard.sql",
+    "data_board" = list(
+      "query_file" = "./sql/data_board.sql",
       "args" = list("start_date" = "19700101",
-                    "end_date" = "20991231"
-      )
+                    "end_date" = "20991231")
     ),
     "bikes_fraud" = list(
-      "query_file" = "./sql/bikes_fraud.sql"
+      "query_file" = "./sql/bikes_fraud.sql",
+      "args" = list()
     ),
     "users_info" = list(
-      "query_file" = "./sql/users_info.sql"
+      "query_file" = "./sql/users_info.sql",
+      "args" = list()
     )
   )
   
@@ -39,6 +39,7 @@ getSqlPayload <- function(name) {
   file_or_not <- file.exists(query_file)
   return(file_or_not)
 }
+
 
 #' Parse the sql payload
 #'

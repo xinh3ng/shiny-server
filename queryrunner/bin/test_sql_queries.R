@@ -1,10 +1,11 @@
 
 
 suppressPackageStartupMessages(suppressWarnings({
-  library("futile.logger")
-  library("dplyr")
+  library(futile.logger)
+  library(dplyr)
   flog.layout(layout.format('[~t] ~l - ~m'))
   
+  # Check if calling from Mac or Linux server
   sys_ver <- Sys.info()[["version"]]
   if (grepl("Darwin", sys_ver)) {
     setwd("~/tritra/shiny-server")  # mac  
@@ -14,6 +15,7 @@ suppressPackageStartupMessages(suppressWarnings({
   source("./queryrunner/utils/query_utils.R")
 }))
 
+options(warn=1)
 
 ################################################
 ################################################
@@ -21,7 +23,7 @@ suppressPackageStartupMessages(suppressWarnings({
 # 2016-11-08 is the start date of Tritra operations!
 date_range <- c("20161108", gsub("-", "", Sys.Date()+2) )
 
-query_name <- "bikes_fraud"  # hourly_trips, databoard, bikes_fraud, users_info
+query_name <- "users_info"  # hourly_trips, data_board, bikes_fraud, users_info
 secret_file <- "~/.tritra_secret"
 
 data <- runQueryWrapperFn(query_name, date_range, secret_file=secret_file)
