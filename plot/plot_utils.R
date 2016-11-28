@@ -32,18 +32,28 @@ plot_dashboard <- function(data){
   group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
              'trips_bike','active_bikes','active_users','first_trip')
   ffdata <- .reshape_dashboard(table = data, args = args, reshape_vars = group)
+  
+  row_ts <- length(ffdata$ts) #auto_axis_x breaks
+  kinds_gtsp <- length(unique(ffdata$gtsp))
+  if (row_ts/kinds_gtsp < 10){ 
+    breaks <- "1 day"
+  } else if ((row_ts/kinds_gtsp >= 10) && (row_ts/kinds_gtsp < 30)){
+    breaks <- "2 days"
+  } else if (row_ts/kinds_gtsp >= 30){
+    breaks <- "3 days"  
+  }
   ggplot(data = ffdata ,aes(x = ts,y = tsp)) + #start
     geom_line(size = 0.8, color = 'blue') + geom_point(size=1.5, shape=20, color = 'black') +
     facet_wrap(~gtsp, nrow = 4, scales = 'free') +
     labs(title = "data_plot",x = "date",y = "") +
-    scale_x_date (date_breaks = "1 day", date_labels = "%m-%d") +
+    scale_x_date (date_breaks = breaks, date_labels = "%m-%d") +
     theme_bw() +
     theme(
       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
       axis.title.x = element_text(size=15,colour = "black",face = "bold"),
       axis.title.y = element_text(size=15,colour = "black",face = "bold"),
-      axis.text.x  = element_text(size=10, angle=60, vjust=0.5,face = "plain",colour = "gray50"),
-      axis.text.y = element_text(size=10,face = "plain",colour = "gray50"),
+      axis.text.x  = element_text(size=10, angle=90, vjust=0.5,face = "bold",colour = "gray50"),
+      axis.text.y = element_text(size=10,face = "bold",colour = "gray50"),
       axis.line = element_line(colour = "black",size = 1)
     )
 }
