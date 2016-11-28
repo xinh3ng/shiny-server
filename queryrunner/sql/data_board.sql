@@ -21,7 +21,7 @@ base_trips as (
 	cross join date d
 	where 1=1 
 	  and t.updated_at at time zone 'hkt' >= d.start_date
-	  and t.updated_at at time zone 'hkt' < d.end_date
+	  and t.updated_at at time zone 'hkt' <= d.end_date
 	group by 1
 ),
 
@@ -33,7 +33,7 @@ base_users as
 	  cross join date d
 	where 1=1 
 		and	updated_at at time zone 'hkt' >= d.start_date
-		and updated_at at time zone 'hkt' < d.end_date
+		and updated_at at time zone 'hkt' <= d.end_date
 	group by 1
 ),
 
@@ -51,7 +51,7 @@ analysis_users as (
 	          cross join date d
 	      where 1 = 1  
 	          and nt.updated_at at time zone 'hkt' >= d.start_date
-	          and nt.updated_at at time zone 'hkt' < d.end_date
+	          and nt.updated_at at time zone 'hkt' <= d.end_date
 	      group by 1,2
 	      ) as b
     join (
@@ -80,7 +80,7 @@ base_bikes as (
         cross join date d
 	  where 1=1 
 		    and	updated_at at time zone 'hkt' >= d.start_date
-	    	and updated_at at time zone 'hkt' < d.end_date
+	    	and updated_at at time zone 'hkt' <= d.end_date
 	    	and is_completed is TRUE
 	   group by 1
     )

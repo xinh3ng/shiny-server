@@ -21,10 +21,10 @@ options(warn=1)
 ################################################
 # Parameter settings
 # 2016-11-08 is the start date of Tritra operations!
+secret_file <- "~/.tritra_secret"
 date_range <- c("20161108", gsub("-", "", Sys.Date()+2) )
 
-query_name <- "users_info"  # hourly_trips, data_board, bikes_fraud, users_info
-secret_file <- "~/.tritra_secret"
+query_name <- "bikes_fraud"  # hourly_trips, data_board, bikes_fraud, users_info
 
 data <- runQueryWrapperFn(query_name, date_range, secret_file=secret_file)
 flog.info("ALL DONE!")
