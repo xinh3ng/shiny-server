@@ -90,10 +90,10 @@ select
 	,cast(cast(bt.completed_trips as numeric) /cast (bt.trips as numeric) as decimal (10,2)) as c_r
 	,cast(cast(bt.paid_trips as numeric) /cast(bt.trips as numeric)as decimal (10,2)) as trips_paid_pct
 	,cast(bt.paid_fare_CNY/bt.total_fare_CNY as decimal (10,2)) as fare_paid_pct
-	,cast(cast(bt.completed_trips as numeric)/76 as decimal (10,2)) as trips_bike
+	,cast(cast(bt.completed_trips as numeric)/84 as decimal (10,2)) as trips_bike
 	,active_bikes as active_bikes
 	,cast(bt.total_fare_CNY::numeric / bt.completed_trips::numeric as decimal (10,2)) as avg_fare_trip_cny
-	,cast(bt.total_fare_CNY/76 as decimal (10,2)) as avg_fare_bike_cny
+	,cast(bt.total_fare_CNY/84 as decimal (10,2)) as avg_fare_bike_cny
 	,bu.signup
 	,au.first_trip
 	,au.active_users
