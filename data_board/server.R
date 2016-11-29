@@ -15,7 +15,8 @@ suppressPackageStartupMessages({
     setwd("/srv/shiny-server")  # shiny server 
   }
   source("./queryrunner/utils/query_utils.R")  # To call runQueryWrapperFn
-  source("./plot/plot_utils.R")
+  source("./plot/image_utils.R")
+  source("./plot/input_utils.R")
 })
 
 options(warn=1)
@@ -24,7 +25,7 @@ options(warn=1)
 shinyServer(function(input, output) {
   #create reactive
   column_selected <- reactive({
-    long_col_names <- .create_col_names("data_board","bikes_fraud","users_info")
+    long_col_names <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
     long_col_names %>%
       filter(name == input$query_name) %>%
       select(subcolumn)

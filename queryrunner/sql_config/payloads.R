@@ -44,23 +44,3 @@ getSqlPayload <- function(name) {
   
   return(all[[name]])
 }
-.create_col_names <- function(...){
-  a <- c(...)
-  num_1 <- length(getSqlPayload(a[1])$column)
-  num_2 <- length(getSqlPayload(a[2])$column)
-  num_3 <- length(getSqlPayload(a[3])$column)
-  name <- data.frame(
-    rep(c(a[1],a[2],a[3]),
-    c(num_1,num_2,num_3))
-  )
-  col_1 <- data.frame(getSqlPayload(a[1])$column)
-  colnames(col_1) <- "subcolumn"
-  col_2 <- data.frame(getSqlPayload(a[2])$column)
-  colnames(col_2) <- "subcolumn"
-  col_3 <- data.frame(getSqlPayload(a[3])$column)
-  colnames(col_3) <- "subcolumn"
-  subcolumn <- rbind(col_1,col_2,col_3)
-  long_col_names <- data.frame(name,subcolumn)
-  colnames(long_col_names) <- c("name","subcolumn")
-  return(long_col_names)
-}
