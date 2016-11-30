@@ -57,7 +57,7 @@ select
 		'010087',
 		'010090',
 		'010093',
-		'010094',)
+		'010094')
 		then 'N' else 'Y' end as is_in_school
     ,bb.bike_lt_c_trips
     ,bb.bike_lt_paid_trips

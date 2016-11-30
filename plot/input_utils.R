@@ -20,7 +20,7 @@ create_col_names <- function(t1,t2,t3){
   num_2 <- length(all$col_bikes_fraud )
   num_3 <- length(all$col_users_info )
   name <- data.frame(
-    rep(c(as.character(table[1]), as.character(table[2]), as.character(table[2])),
+    rep(c(as.character(table[1]), as.character(table[2]), as.character(table[3])),
         c(num_1,num_2,num_3))
   )
   col_1 <- data.frame(all[1])

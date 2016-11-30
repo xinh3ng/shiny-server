@@ -41,7 +41,7 @@ shinyServer(function(input, output) {
     bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
     
     if (input$query_name %in% c("data_board","bikes_fraud","users_info")) {
-      if(input$subcolumn == "all"){
+      if("all" %in% input$subcolumn){
         bdata
       } else {
         cs <- as.matrix(input$subcolumn)
