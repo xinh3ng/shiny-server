@@ -6,7 +6,7 @@ with date as (
 
 base_trips as (
   select 
-		date_trunc('day', t.updated_at at time zone 'hkt') as ts
+		date_trunc('week', t.updated_at at time zone 'hkt') as ts
 		,count(t.trip_id) as trips
 		,sum(case when t.is_completed is TRUE then 1 end ) as completed_trips
 		,sum(case when b.is_paid is TRUE then 1 end ) as paid_trips
@@ -27,7 +27,7 @@ base_trips as (
 
 base_users as
 	(select 
-		date_trunc('day', updated_at at time zone 'hkt') as ts
+		date_trunc('week', updated_at at time zone 'hkt') as ts
 		,count(*) as signup
 	from users
 	  cross join date d
@@ -44,7 +44,7 @@ analysis_users as (
         , f.ft as first_trip
     from (
 	      select 
-	          date_trunc('day',nt.updated_at at time zone 'hkt') as ts
+	          date_trunc('week',nt.updated_at at time zone 'hkt') as ts
 	          ,nt.user_id
 	          ,count(nt.trip_id) as now_trip
 	      from trips nt
@@ -61,7 +61,7 @@ analysis_users as (
 	      from (
 		        select 
 		            user_id
-		            ,date_trunc('day',min(t.updated_at at time zone 'hkt')) as min_trip_date
+		            ,date_trunc('week',min(t.updated_at at time zone 'hkt')) as min_trip_date
 		        from trips t
 		    where 1=1
 		        and t.is_completed is TRUE
@@ -74,7 +74,7 @@ analysis_users as (
 
 base_bikes as (
     select 
-        date_trunc('day',updated_at at time zone 'hkt') as ts,
+        date_trunc('week',updated_at at time zone 'hkt') as ts,
         count(distinct(bike_id)) as active_bikes
     from trips
         cross join date d

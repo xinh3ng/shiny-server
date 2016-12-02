@@ -12,12 +12,12 @@ with user_trips as (
 )
 
 select 
-	  u.user_id
+	  u.user_id::text
 	  ,u.updated_at at time zone 'hkt' as signup_time
 	  ,ut.lifetime_c_trips as user_lifetime_c_trips	
 	  ,ut.lifetime_paid_trips as user_lifetime_paid_trips	
 	  ,ut.bike_used
-	  ,u.name as user_name	
+	  ,u.name as user_name
 	  ,u.cell_phone as user_phone	
 	  ,u.referrer_cell_phone as referrer	
 	  ,u.photo_id_value as user_student_id	
@@ -31,4 +31,4 @@ from users u
 	  left join user_trips ut on ut.user_id = u.user_id	
 where 1=1	
 	  and u.is_active = 'TRUE'	
-order by 3, 4
+order by 2 desc

@@ -28,6 +28,18 @@ getSqlPayload <- function(name) {
     "users_info" = list(
       "query_file" = "./queryrunner/sql/users_info.sql",
       "args" = list()
+    ),
+    "referral" = list(
+      "query_file" = "./queryrunner/sql/referral.sql",
+      "args" = list()
+    ),
+    "all_trips" = list(
+      "query_file" = "./queryrunner/sql/all_trips.sql",
+      "args" = list()
+    ),
+    "data_board_weekly" = list(
+      "query_file" = "./queryrunner/sql/data_board_weekly.sql",
+      "args" = list()
     )
   )
   
