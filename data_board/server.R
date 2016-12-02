@@ -79,6 +79,13 @@ shinyServer(function(input, output) {
     bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
       plot_hourlytrips(data=bdata)
   })
+  output$plot_hourly_trips_dod <- renderPlot({
+    date_range_2 <- gsub("-", "", input$date_range_2)
+    bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
+    bdata <- dcast(bdata, hour ~ date ,value.var = 'completed_trips') #long table -> wide table
+    bdata_dod <- cal_hourly_trips_dod(data=bdata) # calculation wide table & -> long table
+    plot_hourlytrips_dod(data=bdata_dod)
+  })
 
 #### tab User/Bike info
   # table_ub_info

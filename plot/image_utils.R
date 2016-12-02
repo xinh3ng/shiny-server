@@ -61,11 +61,11 @@ plot_dashboard <- function(data){
 # plot hourly_trips
 plot_hourlytrips <- function(data){
   ggplot(data, aes(date, hour)) + #start
-    geom_tile(aes(fill= completed_trips)) + #bulk value
+    geom_tile(aes(fill= completed_trips)) +
     scale_fill_continuous(high="darkgreen", low="white", name="trips") +
     labs(title="hourly_trips", x="date", y="hourly", face = "completed_trips") +
     scale_y_continuous(breaks = c(0:24)) +
-    geom_text(aes(label=round(completed_trips,2)), angle=0, size = 3) +
+    geom_text(aes(label=round(completed_trips,2)), angle=0, size = 3) + #bulk value
     theme_bw() +
     theme(
       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
@@ -79,7 +79,56 @@ plot_hourlytrips <- function(data){
       legend.key.size = unit(0.8, "cm")
     )
 }
-
-plot_empty <- function(data) {
-  ggplot()
+# plot hourlytrips_dod
+  # create table hourlytrips_dod
+cal_hourly_trips_dod <- function(data){
+  i <- 1 # rows
+  j <- length(data[0,]) # columns
+  m <- 1
+  dod <- matrix(1,24,length(data[0,]))
+  dod <- data.frame(dod)
+  colnames(dod) <- colnames(data) # copy tabel header
+  for (m in 1:24){
+    dod[m,1] <- data[m,1]# copy column 'hour'
+    dod[m,2] <- 0#
+    m <- m+1
+  }
+  
+  for(j in 3:length(data[0,]) ){
+    for(i in 1:24 ){
+      if ( is.na(data[i,j]) ){
+        dod[i,j] <- 0#
+      } else if (data[i,j-1] == 0){
+        dod[i,j] <- -1
+      } else{
+        dod[i,j] <- (data[i,j] / data[i,j-1]) - 1
+        i <- i + 1
+      }
+    }
+    i <- 1
+    j <- j - 1
+  }
+  dod <- melt(data = dod, id.vars = "hour", value.name = "dod_growth_pct", variable.name = "date")# wide -> long
+  return(dod)
+}
+  #plot hourlytrips_dod
+plot_hourlytrips_dod <- function(data){
+  ggplot(data, aes(date, hour)) + #start
+    geom_tile(aes(fill=dod_growth_pct)) + 
+    scale_fill_gradient(low="grey", high="darkred",name="dod_growth_pct") +
+    labs(title="dod_growth", x="date", y="hourly", face = "dod_growth_pct") +
+    scale_y_continuous(breaks = c(0:24)) +
+   # geom_text(aes(label=round(dod_growth_pct,2)), angle=0, size = 3) + #bulk value
+    theme_bw() +
+    theme(
+      plot.title = element_text(size=20,colour = "black",face = "bold.italic"),
+      axis.title.x=element_text(size=15, face = "bold"),
+      axis.title.y=element_text(size=15, face = "bold"),
+      axis.text.x=element_text(size=13, colour="grey50", angle = 90, vjust = 0.5, face = "plain"),
+      axis.text.y=element_text(size=15, colour="grey50",face = "plain"),
+      legend.title=element_text(size=15),
+      legend.text=element_text(size=10),
+      panel.grid =element_blank(),
+      legend.key.size = unit(0.8, "cm")
+    )
 }

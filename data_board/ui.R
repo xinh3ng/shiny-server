@@ -65,6 +65,7 @@ shinyUI(fluidPage(
              ),
              mainPanel(
                plotOutput("plot_hourly_trips"),
+               plotOutput("plot_hourly_trips_dod"),
                dataTableOutput("table_hourly_trips")
              ) # end mainPanel2
            ) # end siderbarLayout2
