@@ -11,23 +11,82 @@ suppressPackageStartupMessages({
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Tritra Data Board"),
+  titlePanel("Welcome Tritraer"),
+# navbar setting
+ tagList(
+   navbarPage(
+     h2("TriTra board"),
+#### navbar1
+     tabPanel(h4("Trips analysis"),
+              # "table"
+              sidebarLayout(
+                sidebarPanel(
+                  dateRangeInput("date_range_1", label="Date range (yyyy-mm-dd)",
+                                 start="2016-11-08", end=Sys.Date()+2,
+                                 min="2016-11-01", max="2099-12-31"
+                  ),
+                  selectInput("query_name_1", label="Query name", choices=c( "data_board"),
+                              selected="data_board"
+                  ),
+                  uiOutput("slt_column_1")
+                ),
+                mainPanel(
+                  plotOutput("plot_trips_analysis"),
+                  dataTableOutput("table_trips_analysis")
+                  ## <- tabset
+                  ##      tabsetPanel(
+                  ##        tabPanel("Trips analysis",
+                  ##                 plotOutput("plot_trips_analysis"),
+                  ##                 dataTableOutput("table_trips_analysis")
+                  ##        ), # end tab1
+                  ##        tabPanel("Hourly trips",
+                  ##                 plotOutput("plot_hourly_trips"),
+                  ##                 dataTableOutput("table_hourly_trips")
+                  ##        ), # end tab2
+                  ##        tabPanel("User/Bike info",
+                  ##                 dataTableOutput("table_ub_info")
+                  ##        ) # end tab3
+                  ##      ) # end tabsetPanel
+                  
+                ) # end mainPanel1
+              ) # end siderbarLayout1
+     ), # end navbar1
+#### navbar 2
+  tabPanel(h4("Hourly_trips"),
+           sidebarLayout(
+             sidebarPanel(
+               dateRangeInput("date_range_2", label="Date range (yyyy-mm-dd)",
+                              start="2016-11-08", end=Sys.Date()+2,
+                              min="2016-11-01", max="2099-12-31"
+               ),
+               selectInput("query_name_2", label="Query name", choices=c("hourly_trips"),
+                           selected="hourly_trips"
+               )
+             ),
+             mainPanel(
+               plotOutput("plot_hourly_trips"),
+               dataTableOutput("table_hourly_trips")
+             ) # end mainPanel2
+           ) # end siderbarLayout2
+   ), # end navbar2
+  tabPanel(h4("Bikes/Users info"),
+           sidebarLayout(
+             sidebarPanel(
+               dateRangeInput("date_range_3", label="Date range (yyyy-mm-dd)",
+                              start="2016-11-08", end=Sys.Date()+2,
+                              min="2016-11-01", max="2099-12-31"
+               ),
+               selectInput("query_name_3", label="Query name", choices=c("bikes_fraud","users_info"),
+                           selected="bikes_fraud"
+               ),
+               uiOutput("slt_column_3")
+             ),
+             mainPanel(
+               dataTableOutput("table_ub_info")
+             ) # end mainPanel3
+           ) # end siderbarLayout3
+    ) # end navbar3
   
-  # "table"
-  sidebarLayout(
-    sidebarPanel(
-      dateRangeInput("date_range", label="Date range (yyyy-mm-dd)",
-                     start="2016-11-08", end=Sys.Date()+2,
-                     min="2016-11-01", max="2099-12-31"
-      ),
-      selectInput("query_name", label="Query name", choices=c("hourly_trips", "data_board", "bikes_fraud", "users_info"),
-                  selected="hourly_trips"
-      ),
-      uiOutput("slt_column")
-    ),
-    mainPanel(
-      plotOutput("plot"),
-      dataTableOutput("table")
-    )
-  )
+  )# end navbarPage 
+  ) # end tagList
 ))

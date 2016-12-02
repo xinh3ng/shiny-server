@@ -24,46 +24,74 @@ options(warn=1)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   #create reactive
-  column_selected <- reactive({
-    long_col_names <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
-    long_col_names %>%
-      filter(name == input$query_name) %>%
+  column_selected_1 <- reactive({
+    long_col_names_1 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
+    long_col_names_1 %>%
+      filter(name == input$query_name_1) %>%
+      select(subcolumn)
+  })
+  
+  column_selected_3 <- reactive({
+    long_col_names_3 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
+    long_col_names_3 %>%
+      filter(name == input$query_name_3) %>%
       select(subcolumn)
   })
   #sub select
-  output$slt_column <- renderUI({
-    checkboxGroupInput("subcolumn",label = "Column", choices = column_selected()$subcolumn, selected = "all")
+  output$slt_column_1 <- renderUI({
+    checkboxGroupInput("subcolumn_1",label = "Column", choices = column_selected_1()$subcolumn, selected = "all")
   })
   
-  # "table"
-  output$table <- renderDataTable({
-    date_range <- gsub("-", "", input$date_range)
-    bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
+  output$slt_column_3 <- renderUI({
+    checkboxGroupInput("subcolumn_3",label = "Column", choices = column_selected_3()$subcolumn, selected = "all")
+  })
+#### tab Trips analysis
+  # "table_trips_analysis"
+  output$table_trips_analysis <- renderDataTable({
+    date_range_1 <- gsub("-", "", input$date_range_1)
+    bdata <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
     
-    if (input$query_name %in% c("data_board","bikes_fraud","users_info")) {
-      if("all" %in% input$subcolumn){
+      if("all" %in% input$subcolumn_1){
         bdata
       } else {
-        cs <- as.matrix(input$subcolumn)
+        cs <- as.matrix(input$subcolumn_1)
         bdata[,cs[,1]] 
       }
-    } else if (input$query_name == "hourly_trips") { #hourly_trips data reshape
-      dcast(bdata, hour ~ date ,value.var = 'completed_trips')
-    }
   })
   
-  # plot
-  output$plot <- renderPlot({
-    date_range <- gsub("-", "", input$date_range)
-    bdata <- runQueryWrapperFn(input$query_name, date_range, secret_file='~/.tritra_secret')
-    
-    if (input$query_name == "data_board") {
+  # plot_trips_analysis
+  output$plot_trips_analysis <- renderPlot({
+    date_range_1 <- gsub("-", "", input$date_range_1)
+    bdata <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
       plot_dashboard(data=bdata)
-    } else if (input$query_name == "hourly_trips"){ #plot hourlytrips
-      plot_hourlytrips(data=bdata)
-    } else if (input$query_name %in% c("bikes_fraud","users_info")){
-      plot_empty(data=bdata)
-    }
-    
   })
+#### tab Hourly trips
+  # table_hourly_trips
+  output$table_hourly_trips <- renderDataTable({
+    date_range_2 <- gsub("-", "", input$date_range_2)
+    bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
+      dcast(bdata, hour ~ date ,value.var = 'completed_trips')
+  })
+  
+  # plot_hourly_trips
+  output$plot_hourly_trips <- renderPlot({
+    date_range_2 <- gsub("-", "", input$date_range_2)
+    bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
+      plot_hourlytrips(data=bdata)
+  })
+
+#### tab User/Bike info
+  # table_ub_info
+  output$table_ub_info <- renderDataTable({
+    date_range_3 <- gsub("-", "", input$date_range_3)
+    bdata <- runQueryWrapperFn(input$query_name_3, date_range_3, secret_file='~/.tritra_secret')
+      if("all" %in% input$subcolumn_3){
+        bdata
+      } else {
+        cs <- as.matrix(input$subcolumn_3)
+        bdata[,cs[,1]] 
+      }
+  })
+  
+  # plot_ub_info empty
 })
