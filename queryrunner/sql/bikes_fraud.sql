@@ -64,7 +64,7 @@ select
     ,bb.user_served
     ,date(a.bike_lasttrip_time) as bike_lasttrip_time
     
-    ,a.user_id as bike_last_user	
+    ,a.user_id::text as bike_last_user	
     ,ut.lifetime_c_trips as user_lt_c_trips	
     ,ut.lifetime_paid_trips as user_lt_paid_trips	
     ,ut.kinds_bikes_used

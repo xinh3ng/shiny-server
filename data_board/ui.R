@@ -31,28 +31,24 @@ shinyUI(fluidPage(
                   uiOutput("slt_column_1")
                 ),
                 mainPanel(
-                  plotOutput("plot_trips_analysis"),
-                  dataTableOutput("table_trips_analysis")
                   ## <- tabset
-                  ##      tabsetPanel(
-                  ##        tabPanel("Trips analysis",
-                  ##                 plotOutput("plot_trips_analysis"),
-                  ##                 dataTableOutput("table_trips_analysis")
-                  ##        ), # end tab1
-                  ##        tabPanel("Hourly trips",
-                  ##                 plotOutput("plot_hourly_trips"),
-                  ##                 dataTableOutput("table_hourly_trips")
-                  ##        ), # end tab2
-                  ##        tabPanel("User/Bike info",
-                  ##                 dataTableOutput("table_ub_info")
-                  ##        ) # end tab3
-                  ##      ) # end tabsetPanel
+                        tabsetPanel(
+                          tabPanel("daily",
+                                   plotOutput("plot_trips_analysis_daily"),
+                                   dataTableOutput("table_trips_analysis_daily")
+                          ), # end tab1
+                          tabPanel("weekly",
+                                   plotOutput("plot_trips_analysis_weekly"),
+                                   dataTableOutput("table_trips_analysis_weekly")
+                          ) # end tab2
+                        ) # end tabsetPanel
                   
                 ) # end mainPanel1
               ) # end siderbarLayout1
      ), # end navbar1
+
 #### navbar 2
-  tabPanel(h4("Hourly_trips"),
+  tabPanel(h4("Hourly trips"),
            sidebarLayout(
              sidebarPanel(
                dateRangeInput("date_range_2", label="Date range (yyyy-mm-dd)",
@@ -70,24 +66,36 @@ shinyUI(fluidPage(
              ) # end mainPanel2
            ) # end siderbarLayout2
    ), # end navbar2
-  tabPanel(h4("Bikes/Users info"),
+
+# end navbar3
+  tabPanel(h4("Referral"),
            sidebarLayout(
              sidebarPanel(
-               dateRangeInput("date_range_3", label="Date range (yyyy-mm-dd)",
-                              start="2016-11-08", end=Sys.Date()+2,
-                              min="2016-11-01", max="2099-12-31"
-               ),
-               selectInput("query_name_3", label="Query name", choices=c("bikes_fraud","users_info"),
-                           selected="bikes_fraud"
+               selectInput("query_name_3", label="Query name", choices=c("referral"),
+                           selected="referral"
                ),
                uiOutput("slt_column_3")
+             ),
+             mainPanel(
+               dataTableOutput("table_referral")
+             ) # end mainPanel3
+           ) # end siderbarLayout3
+  ), 
+
+# end navbar4
+  tabPanel(h4("Dim info"),
+           sidebarLayout(
+             sidebarPanel(
+               selectInput("query_name_4", label="Query name", choices=c("bikes_fraud","users_info","all_trips"),
+                           selected="bikes_fraud"
+               ),
+               uiOutput("slt_column_4")
              ),
              mainPanel(
                dataTableOutput("table_ub_info")
              ) # end mainPanel3
            ) # end siderbarLayout3
-    ) # end navbar3
-  
+  ) # end navbar3
   )# end navbarPage 
   ) # end tagList
 ))

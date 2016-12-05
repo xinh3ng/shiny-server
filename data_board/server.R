@@ -25,16 +25,23 @@ options(warn=1)
 shinyServer(function(input, output) {
   #create reactive
   column_selected_1 <- reactive({
-    long_col_names_1 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
+    long_col_names_1 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info",t4="referral",t5="all_trips")
     long_col_names_1 %>%
       filter(name == input$query_name_1) %>%
       select(subcolumn)
   })
   
   column_selected_3 <- reactive({
-    long_col_names_3 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info")
+    long_col_names_3 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info",t4="referral",t5="all_trips")
     long_col_names_3 %>%
       filter(name == input$query_name_3) %>%
+      select(subcolumn)
+  
+  })  
+  column_selected_4 <- reactive({
+    long_col_names_4 <- create_col_names(t1="data_board",t2="bikes_fraud",t3="users_info",t4="referral",t5="all_trips")
+    long_col_names_4 %>%
+      filter(name == input$query_name_4) %>%
       select(subcolumn)
   })
   #sub select
@@ -43,11 +50,17 @@ shinyServer(function(input, output) {
   })
   
   output$slt_column_3 <- renderUI({
-    checkboxGroupInput("subcolumn_3",label = "Column", choices = column_selected_3()$subcolumn, selected = "all")
+    checkboxGroupInput("subcolumn_3",label = "Column", choices = column_selected_3()$subcolumn, 
+                       selected = c("referrer_cell_phone","referrer_lifetime_referral"))
+  })
+  
+  output$slt_column_4 <- renderUI({
+    checkboxGroupInput("subcolumn_4",label = "Column", choices = column_selected_4()$subcolumn,selected = "all")
   })
 #### tab Trips analysis
-  # "table_trips_analysis"
-  output$table_trips_analysis <- renderDataTable({
+  ## daily
+  # table_trips_analysis_daily
+  output$table_trips_analysis_daily <- renderDataTable({
     date_range_1 <- gsub("-", "", input$date_range_1)
     bdata <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
     
@@ -59,11 +72,31 @@ shinyServer(function(input, output) {
       }
   })
   
-  # plot_trips_analysis
-  output$plot_trips_analysis <- renderPlot({
+  # plot_trips_analysis_daily
+  output$plot_trips_analysis_daily <- renderPlot({
     date_range_1 <- gsub("-", "", input$date_range_1)
     bdata <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
       plot_dashboard(data=bdata)
+  })
+  ##weekly
+  # table_trips_analysis_weekly
+  output$table_trips_analysis_weekly <- renderDataTable({
+    date_range_1 <- gsub("-", "", input$date_range_1)
+    bdata <- runQueryWrapperFn("data_board_weekly", date_range_1, secret_file='~/.tritra_secret')
+    
+    if("all" %in% input$subcolumn_1){
+      bdata
+    } else {
+      cs <- as.matrix(input$subcolumn_1)
+      bdata[,cs[,1]] 
+    }
+  })
+  
+  # plot_trips_analysis_weekly
+  output$plot_trips_analysis_weekly <- renderPlot({
+    date_range_1 <- gsub("-", "", input$date_range_1)
+    bdata <- runQueryWrapperFn("data_board_weekly", date_range_1, secret_file='~/.tritra_secret')
+    plot_dashboard(data=bdata)
   })
 #### tab Hourly trips
   # table_hourly_trips
@@ -87,18 +120,29 @@ shinyServer(function(input, output) {
     plot_hourlytrips_dod(data=bdata_dod)
   })
 
+#### tab referral
+  # table_referral
+  output$table_referral <- renderDataTable({
+    date_range_3 <- ""
+    bdata <- runQueryWrapperFn(input$query_name_3, date_range_3, secret_file='~/.tritra_secret')
+    if("all" %in% input$subcolumn_3){
+      bdata
+    } else {
+      cs <- as.matrix(input$subcolumn_3)
+      bdata[,cs[,1]] 
+    }
+  })
+  
 #### tab User/Bike info
   # table_ub_info
   output$table_ub_info <- renderDataTable({
-    date_range_3 <- gsub("-", "", input$date_range_3)
-    bdata <- runQueryWrapperFn(input$query_name_3, date_range_3, secret_file='~/.tritra_secret')
-      if("all" %in% input$subcolumn_3){
+    date_range_4 <- ""
+    bdata <- runQueryWrapperFn(input$query_name_4, date_range_4, secret_file='~/.tritra_secret')
+      if("all" %in% input$subcolumn_4){
         bdata
       } else {
-        cs <- as.matrix(input$subcolumn_3)
+        cs <- as.matrix(input$subcolumn_4)
         bdata[,cs[,1]] 
       }
   })
-  
-  # plot_ub_info empty
 })

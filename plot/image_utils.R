@@ -10,8 +10,8 @@ suppressPackageStartupMessages({
   table$ts <- as.Date(table$ts)
   # + element
   pivot <- with(table,data_frame(ts,trips,paid_trips,signup,active_users,
-                                 avg_ontrip_minutes,c_r,trips_paid_pct,trips_bike,
-                                 active_bikes,first_trip)) #ts,trips,paid_trips,signup,active_users
+                                 avg_ontrip_minutes,c_r,trips_paid_pct,trips_active_bike,
+                                 active_bikes,first_trip)) # plot axis_y
   # stack
   j <- 1
   groupvars <- c(1:1)
