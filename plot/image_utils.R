@@ -12,7 +12,6 @@ suppressPackageStartupMessages({
   pivot <- with(table,data_frame(ts,trips,paid_trips,signup,active_users,
                                  avg_ontrip_minutes,c_r,trips_paid_pct,trips_active_bike,
                                  active_bikes,first_trip)) # plot axis_y
-  # stack
   j <- 1
   groupvars <- c(1:1)
   for (i in 1:length(args)) {
@@ -21,6 +20,7 @@ suppressPackageStartupMessages({
       j <- j+1
     }
   }
+  # stack
   fdata = melt(data = pivot, id.vars = groupvars, value.name = "tsp", variable.name = "gtsp")
   return(fdata)
 }
@@ -28,7 +28,7 @@ suppressPackageStartupMessages({
 
 plot_dashboard <- function(data){
   args <- c('ts','trips','paid_trips','signup','active_users','avg_ontrip_minutes',
-           'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
+            'c_r','trips_paid_pct','trips_bike','active_bikes','first_trip')
   group <- c('trips','signup','avg_ontrip_minutes','c_r','trips_paid_pct',
              'trips_bike','active_bikes','active_users','first_trip')
   ffdata <- .reshape_dashboard(table = data, args = args, reshape_vars = group)
@@ -80,7 +80,7 @@ plot_hourlytrips <- function(data){
     )
 }
 # plot hourlytrips_dod
-  # create table hourlytrips_dod
+# create table hourlytrips_dod
 cal_hourly_trips_dod <- function(data){
   i <- 1 # rows
   j <- length(data[0,]) # columns
@@ -111,14 +111,14 @@ cal_hourly_trips_dod <- function(data){
   dod <- melt(data = dod, id.vars = "hour", value.name = "dod_growth_pct", variable.name = "date")# wide -> long
   return(dod)
 }
-  #plot hourlytrips_dod
+#plot hourlytrips_dod # show trips growth by heatmap day over day
 plot_hourlytrips_dod <- function(data){
   ggplot(data, aes(date, hour)) + #start
     geom_tile(aes(fill=dod_growth_pct)) + 
     scale_fill_gradient(low="grey", high="darkred",name="dod_growth_pct") +
     labs(title="dod_growth", x="date", y="hourly", face = "dod_growth_pct") +
     scale_y_continuous(breaks = c(0:24)) +
-   # geom_text(aes(label=round(dod_growth_pct,2)), angle=0, size = 3) + #bulk value
+    # geom_text(aes(label=round(dod_growth_pct,2)), angle=0, size = 3) + #bulk value
     theme_bw() +
     theme(
       plot.title = element_text(size=20,colour = "black",face = "bold.italic"),

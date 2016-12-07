@@ -40,6 +40,10 @@ getSqlPayload <- function(name) {
     "data_board_weekly" = list(
       "query_file" = "./queryrunner/sql/data_board_weekly.sql",
       "args" = list()
+    ),
+    "bills" = list(
+      "query_file" = "./queryrunner/sql/bills.sql",
+      "args" = list()
     )
   )
   
