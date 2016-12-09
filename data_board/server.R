@@ -66,6 +66,14 @@ shinyServer(function(input, output) {
                        selected = "all")
   })
   #### tab Trips analysis
+  ## download Trips analysis
+  observeEvent(input$download_trips_analysis,{
+    date_range_1 <- gsub("-", "", input$date_range_1)
+    bdata_daily <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
+    bdata_weekly <- runQueryWrapperFn("data_board_weekly", date_range_1, secret_file='~/.tritra_secret')
+    write.csv(bdata_daily,"~/desktop/trips_analysis_daily.csv", row.names = F)
+    write.csv(bdata_weekly,"~/desktop/trips_analysis_weekly.csv", row.names = F)
+               })
   ## daily
   # table_trips_analysis_daily
   output$table_trips_analysis_daily <- renderDataTable({
@@ -107,6 +115,12 @@ shinyServer(function(input, output) {
     plot_dashboard(data=bdata)
   })
   #### tab Hourly trips
+  ## download Hourly trips
+  observeEvent(input$download_hourly_trips,{
+    date_range_2 <- gsub("-", "", input$date_range_2)
+    bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
+    write.csv(bdata,"~/desktop/hourly_trips.csv", row.names = F)
+  })
   # table_hourly_trips
   output$table_hourly_trips <- renderDataTable({
     date_range_2 <- gsub("-", "", input$date_range_2)
@@ -129,6 +143,12 @@ shinyServer(function(input, output) {
   })
   
   #### tab referral
+  ## download referral
+  observeEvent(input$download_referral,{
+    date_range_3 <- ""
+    bdata <- runQueryWrapperFn(input$query_name_3, date_range_3, secret_file='~/.tritra_secret')
+    write.csv(bdata,"~/desktop/referral.csv", row.names = F)
+  })
   # table_referral
   output$table_referral <- renderDataTable({
     date_range_3 <- ""
@@ -142,6 +162,12 @@ shinyServer(function(input, output) {
   })
   
   #### tab dim info
+  ## download dim info
+  observeEvent(input$download_dim_info,{
+    date_range_4 <- ""
+    bdata <- runQueryWrapperFn(input$query_name_4, date_range_4, secret_file='~/.tritra_secret')
+    write.csv(bdata,"~/desktop/dim_info.csv", row.names = F)
+  })
   # table_dim_info
   output$table_dim_info <- renderDataTable({
     date_range_4 <- ""

@@ -28,7 +28,8 @@ shinyUI(fluidPage(
                    selectInput("query_name_1", label="Query name", choices=c( "data_board"),
                                selected="data_board"
                    ),
-                   uiOutput("slt_column_1")
+                   uiOutput("slt_column_1"),
+                   actionButton("download_trips_analysis", label = "Download")
                  ),
                  mainPanel(
                    ## <- tabset
@@ -57,7 +58,8 @@ shinyUI(fluidPage(
                    ),
                    selectInput("query_name_2", label="Query name", choices=c("hourly_trips"),
                                selected="hourly_trips"
-                   )
+                   ),
+                   actionButton("download_hourly_trips", label = "Download")
                  ),
                  mainPanel(
                    plotOutput("plot_hourly_trips"),
@@ -74,7 +76,8 @@ shinyUI(fluidPage(
                    selectInput("query_name_3", label="Query name", choices=c("referral"),
                                selected="referral"
                    ),
-                   uiOutput("slt_column_3")
+                   uiOutput("slt_column_3"),
+                   actionButton("download_referral", label = "Download")
                  ),
                  mainPanel(
                    dataTableOutput("table_referral")
@@ -89,7 +92,8 @@ shinyUI(fluidPage(
                    selectInput("query_name_4", label="Query name", choices=c("bikes_fraud","users_info","all_trips","bills"),
                                selected="bikes_fraud"
                    ),
-                   uiOutput("slt_column_4")
+                   uiOutput("slt_column_4"),
+                   actionButton("download_dim_info", label = "Download")
                  ),
                  mainPanel(
                    dataTableOutput("table_dim_info")
