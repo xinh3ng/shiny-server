@@ -15,8 +15,10 @@ suppressPackageStartupMessages({
     setwd("/srv/shiny-server")  # shiny server 
   }
   source("./queryrunner/utils/query_utils.R")  # To call runQueryWrapperFn
-  source("./plot/image_utils.R")
-  source("./plot/input_utils.R")
+  source("./plot/image_utils.R") # To call plot_x
+  source("./plot/input_utils.R") # To call create_col_names
+  source("./queryrunner/utils/download_utils.R") # To call get_path
+  
 })
 
 options(warn=1)
@@ -71,9 +73,11 @@ shinyServer(function(input, output) {
     date_range_1 <- gsub("-", "", input$date_range_1)
     bdata_daily <- runQueryWrapperFn(input$query_name_1, date_range_1, secret_file='~/.tritra_secret')
     bdata_weekly <- runQueryWrapperFn("data_board_weekly", date_range_1, secret_file='~/.tritra_secret')
-    write.csv(bdata_daily,"~/desktop/trips_analysis_daily.csv", row.names = F)
-    write.csv(bdata_weekly,"~/desktop/trips_analysis_weekly.csv", row.names = F)
-               })
+    path_daily <- get_path(set_table_name = "trips_analysis_daily.csv")
+    path_weekly <- get_path(set_table_name = "trips_analysis_weekly.csv")
+    write.csv(bdata_daily, path_daily, row.names = F)
+    write.csv(bdata_weekly, path_weekly, row.names = F)
+  })
   ## daily
   # table_trips_analysis_daily
   output$table_trips_analysis_daily <- renderDataTable({
@@ -119,7 +123,8 @@ shinyServer(function(input, output) {
   observeEvent(input$download_hourly_trips,{
     date_range_2 <- gsub("-", "", input$date_range_2)
     bdata <- runQueryWrapperFn(input$query_name_2, date_range_2, secret_file='~/.tritra_secret')
-    write.csv(bdata,"~/desktop/hourly_trips.csv", row.names = F)
+    path <- get_path(set_table_name = "hourly_trips.csv")
+    write.csv(bdata, path, row.names = F)
   })
   # table_hourly_trips
   output$table_hourly_trips <- renderDataTable({
@@ -147,7 +152,8 @@ shinyServer(function(input, output) {
   observeEvent(input$download_referral,{
     date_range_3 <- ""
     bdata <- runQueryWrapperFn(input$query_name_3, date_range_3, secret_file='~/.tritra_secret')
-    write.csv(bdata,"~/desktop/referral.csv", row.names = F)
+    path <- get_path(set_table_name = "referral.csv")
+    write.csv(bdata, path, row.names = F)
   })
   # table_referral
   output$table_referral <- renderDataTable({
@@ -166,7 +172,8 @@ shinyServer(function(input, output) {
   observeEvent(input$download_dim_info,{
     date_range_4 <- ""
     bdata <- runQueryWrapperFn(input$query_name_4, date_range_4, secret_file='~/.tritra_secret')
-    write.csv(bdata,"~/desktop/dim_info.csv", row.names = F)
+    path <- get_path(set_table_name = "dim_info.csv")
+    write.csv(bdata, path, row.names = F)
   })
   # table_dim_info
   output$table_dim_info <- renderDataTable({
